@@ -98,11 +98,12 @@ public class NetworkManager : MonoBehaviour {
     }
     private void OnOtherPlayerDisconnected(SocketIOEvent s)
     {
-
     }
     private void OnPlay(SocketIOEvent e)
     {
-
+        print("you joined");
+        string data = e.data.ToString();
+        UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
     }
     private void OnPlayerMove(SocketIOEvent e)
     {
