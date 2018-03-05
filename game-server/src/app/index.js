@@ -19,7 +19,7 @@ io.on("connection", function(socket){
     currentPlayer.name = "unknown";
 
     socket.on("player_connect", function(){
-        console.log(currentPlayer.name + " recived: playerConnect");
+        console.log(currentPlayer.name + " recived: player_connect");
         for(var i = 0; i < clients.length; i++){
             var playerConected = {
                 name: clients[i].name,
@@ -54,8 +54,8 @@ io.on("connection", function(socket){
                     position: _playerSpawnPoint.position,
                     rotation: _playerSpawnPoint.rotation
                 }
+                playerSpawnPoints.push(playerSpawnPoint);
             });
-            playerSpawnPoints.push(playerSpawnPoint);
         }
         var enemiesResponse = {
             enemies: enemies
