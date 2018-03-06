@@ -9,7 +9,7 @@ namespace Assets.Entities
     [Serializable]
     public class PositionJSON
     {
-        public float[] position { get; set; }
+        public float[] position;
 
         public PositionJSON(Vector3 pPosition)
         {

@@ -8,10 +8,10 @@ namespace Assets.Entities
     [Serializable]
     public class HealthChangeJSON
     {
-        public string name { get; set; }
-        public int healthChange { get; set; }
-        public string from { get; set; }
-        public bool isEnemy { get; set; }
+        public string name;
+        public int healthChange;
+        public string from;
+        public bool isEnemy;
 
         public HealthChangeJSON(string pName, int pHealth, string pFrom, bool pIsEnemy)
         {

@@ -9,10 +9,10 @@ namespace Assets.Entities
     [Serializable]
     public class UserJSON
     {
-        public string name { get; set; }
-        public float[] position { get; set; }
-        public float[] rotation { get; set; }
-        public int health { get; set; }
+        public string name;
+        public float[] position;
+        public float[] rotation;
+        public int health;
         
         public static UserJSON CreateFromJSON(string pData)
         {

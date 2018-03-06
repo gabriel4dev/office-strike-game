@@ -39,11 +39,11 @@ io.on("connection", function(socket){
         if(clients.length === 0){
             numberOfEnemies = data.enemySpawnPoints.length;
             enemies = [];
-            data.enemySpawnPoints.forEach(function(enemiSpawnPoint){
+            data.enemySpawnPoints.forEach(function(enemySpawnPoint){
                 var enemy = {
                     name: guid(),
                     position: enemySpawnPoint.position,
-                    rotation: enemuSpawnPoint.rotation,
+                    rotation: enemySpawnPoint.rotation,
                     health: 100
                 }
                 enemies.push(enemy);
@@ -70,7 +70,7 @@ io.on("connection", function(socket){
             rotation: randomSpawnPoint.rotation,
             health: 100
         };
-        clientes.push(currentPlayer);
+        clients.push(currentPlayer);
         //in your current game, tell you that you have joined
         console.log(currentPlayer.name+" emit: play: " +JSON.stringify(currentPlayer));
         socket.emit("play", currentPlayer);
@@ -135,7 +135,7 @@ io.on("connection", function(socket){
     socket.on("disconnect", function(){
         console.log(currentPlayer.name+" received: disconnect " +currentPlayer.name);
         socket.broadcast.emit("other_player_disconnected", currentPlayer);
-        console.log(currentPlayer.name+ "broadcasting: other_player_disconnected: "+ JSON.stringify(currentPlayer));
+        console.log(currentPlayer.name+ " broadcasting: other_player_disconnected: "+ JSON.stringify(currentPlayer));
         for(var i=0; i<clients.length;i++){
             if(clients[i].name === currentPlayer.name){
                 clients.splice(i,1);

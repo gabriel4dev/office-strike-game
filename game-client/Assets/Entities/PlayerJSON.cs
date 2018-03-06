@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
 namespace Assets.Entities
 {
     [Serializable]
     public class PlayerJSON
     {
-        public string name { get; set; }
-        public List<PointJSON> playerSpawnPoints { get; set; }
-        public List<PointJSON> enemySpawnPoints { get; set; }
+        public string name;
+        public List<PointJSON> playerSpawnPoints;
+        public List<PointJSON> enemySpawnPoints;
 
         public PlayerJSON(string pName, List<SpawnPoint> pPlayerSpawnPoints, List<SpawnPoint> pEnemySpawnPoints)
         {

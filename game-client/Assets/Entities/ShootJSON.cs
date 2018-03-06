@@ -9,7 +9,7 @@ namespace Assets.Entities
     [Serializable]
     public class ShootJSON
     {
-        public string name { get; set; }
+        public string name;
 
         public static ShootJSON CreateFromJSON(string pData)
         {

@@ -8,8 +8,8 @@ namespace Assets.Entities
     [Serializable]
     public class PointJSON
     {
-        public float[] position { get; set; }
-        public float[] rotation { get; set; }
+        public float[] position;
+        public float[] rotation;
         public PointJSON(SpawnPoint pSpawnPoint)
         {
             this.position = new float[] { pSpawnPoint.transform.position.x, pSpawnPoint.transform.position.y, pSpawnPoint.transform.position.z };

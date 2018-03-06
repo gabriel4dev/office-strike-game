@@ -8,7 +8,7 @@ namespace Assets.Entities
 {
     class RotationJSON
     {
-        public float[] rotation { get; set; }
+        public float[] rotation;
 
         public RotationJSON(Quaternion pQuaternion)
         {

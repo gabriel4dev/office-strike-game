@@ -9,7 +9,7 @@ namespace Assets.Entities
     [Serializable]
     public class EnemiesJSON
     {
-        public List<UserJSON> Enemies { get; set; }
+        public List<UserJSON> enemies;
         
         public static EnemiesJSON CreateFromJSON(string pData)
         {

@@ -9,8 +9,8 @@ namespace Assets.Entities
     [Serializable]
     public class UserHealthJSON
     {
-        public string name { get; set; }
-        public int health { get; set; }
+        public string name;
+        public int health;
 
         public static UserHealthJSON CreateFromJSON(string pData)
         {
