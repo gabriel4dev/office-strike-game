@@ -20,18 +20,13 @@ public class Health : MonoBehaviour {
         this.isLocalPlayer = vControler.isLocalPlayer;
 	}
 
-    public void TakeDamage(GameObject playerFrom, int ammount)
+    public void TakeDamage(GameObject playerFrom, int amount)
     {
-        this.currentHealth -= ammount;
-        Debug.Log(this.currentHealth + " de daño");
-        //TODO networking stuff (Take Damage)
-        this.OnChangeHealth();
-
+        NetworkManager.instance.GetComponent<NetworkManager>().CommandHealthChange(playerFrom, this.gameObject, amount, this.isEnemy);
     }
 
     public void OnChangeHealth()
     {
-        Debug.Log("health Changing");
         this.healthbar.sizeDelta = new Vector2(this.currentHealth, healthbar.sizeDelta.y);
         if(this.currentHealth <= 0)
         {

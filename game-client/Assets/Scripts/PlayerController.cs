@@ -5,14 +5,34 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    public float speed = 6f;
+    public Rigidbody playerRigidBody;
+    public float timeBetweenBullets;
+
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
-    public bool isLocalPlayer = true; //TODO set back to false when networking
+    public bool isLocalPlayer = false;
 
     private Vector3 oldPosition;
     private Vector3 currentPosition;
     private Quaternion oldRotation;
     private Quaternion currentRotation;
+
+    private Vector3 movement;
+
+    private float timer;
+
+    private int floorMask;
+    private float camRayLength = 100f;
+
+    private PlayerShooting playerShooting;
+
+    private void Awake()
+    {
+        this.floorMask = LayerMask.GetMask("Floor");
+        this.playerRigidBody = GetComponent<Rigidbody>();
+        this.playerShooting = GetComponentInChildren<PlayerShooting>();
+    }
 
 
     // Use this for initialization
@@ -24,45 +44,59 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         if (!isLocalPlayer)
         {
             return;
         }
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
-        var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
+        this.timer = this.timer + Time.deltaTime;
 
-        transform.Rotate(0, x, 0);
-        transform.Translate(0, 0, z);
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
-        this.currentPosition = this.transform.position;
-        this.currentRotation = this.transform.rotation;
-
-        if(this.currentPosition != this.oldPosition)
-        {
-            //TODO networking stuff (transform)
-            this.oldPosition = this.currentPosition;
-        }
-        if(this.currentRotation != this.oldRotation)
-        {
-            //TODO networking stuff (rotation)
-            this.oldRotation = this.currentRotation;
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //TODO networking stuff (shooting)
-            this.GunFire();
-        }
+        this.Move(h, v);
+        this.Turn();
 	}
 
-    public void GunFire()
+    private void Move(float h, float v)
     {
-        var bullet = Instantiate(this.bulletPrefab, this.bulletSpawn.position, this.bulletSpawn.rotation) as GameObject;
-        Bullet b = bullet.GetComponent<Bullet>();
-        b.playerFrom = this.gameObject;
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.up * 6;
+        this.movement.Set(h, 0f, v);
+        this.movement = this.movement.normalized * this.speed * Time.deltaTime;
+        this.playerRigidBody.MovePosition(this.transform.position + movement);
+        this.currentPosition = this.transform.position + movement;
+        if (this.currentPosition != this.oldPosition)
+        {
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandMove(this.currentPosition);
+            this.oldPosition = this.currentPosition;
+        }
+    }
 
-        Destroy(bullet, 2.0f);
+    private void Turn()
+    {
+        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+        RaycastHit floorHit;
+        if(Physics.Raycast(camRay, out floorHit, camRayLength, floorMask))
+        {
+            Vector3 playerToMouse = floorHit.point - this.transform.position;
+            playerToMouse.y = 0f;
+
+            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+            this.playerRigidBody.MoveRotation(newRotation);
+            this.currentRotation = newRotation;
+            if (this.currentRotation != this.oldRotation)
+            {
+                NetworkManager.instance.GetComponent<NetworkManager>().CommandTurn(this.currentRotation);
+                this.oldRotation = this.currentRotation;
+            }
+        }
+    }
+
+    public void Shoot()
+    {
+        if(this.playerShooting != null)
+        {
+            this.playerShooting.Shoot();
+        }
     }
 }
